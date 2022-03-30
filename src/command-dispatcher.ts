@@ -34,7 +34,7 @@ function dispatchCommand(command: string[]){
 }
 
 function validCommandArgNumber(command: string[], requiredNumber: number){
-    let valid: boolean = command.length > requiredNumber
+    let valid: boolean = command.length >= requiredNumber
 
     if(!valid) printHelp();
     
