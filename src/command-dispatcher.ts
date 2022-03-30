@@ -1,11 +1,9 @@
-import './server';
-import { issueTableCreate, issueUserCreation } from './server';
+const {issueTableCreate, issueUserCreation,getAllUsersByLocation, getUser } = require('./server');
 
 enum commandsList {
     CREATE_TABLE = "newtable",
-    ADD_FIELD = "newfield",
     ADD_USER = "newuser",
-    LIST_USERS = "listusers"
+    LIST_USERS_BY_LOCATION = "listbylocation"
 }
 
 const args: string[] = (process.argv.slice(2));
@@ -16,17 +14,14 @@ function dispatchCommand(command: string[]){
             issueTableCreate();
             break;
 
-        case commandsList.ADD_FIELD:
-            break;
-
         case commandsList.ADD_USER:
             if(validCommandArgNumber(command,2))
                 issueUserCreation(command[1]);
             break;
 
-        case commandsList.LIST_USERS:
-            break;
-            
+        case commandsList.LIST_USERS_BY_LOCATION:
+            if(validCommandArgNumber(command,2))
+                getAllUsersByLocation(command[1])
         default:
             printHelp();
             break;
@@ -45,9 +40,8 @@ function printHelp(){
     console.log(
         "Please use one of the following commands:\n\n",
         "# " + commandsList.CREATE_TABLE + " -> Create a new github_users table\n\n",
-        "# " + commandsList.ADD_FIELD + " <field_name> -> Create a new field with name <field_name> on the github_users table\n\n",
         "# " + commandsList.ADD_USER + " <name> -> Create a new user with name <name> and add it to table github_users\n\n",
-        "# " + commandsList.LIST_USERS + " -> List all users in github_users table\n"
+        "# " + commandsList.LIST_USERS_BY_LOCATION + " <location> -> List all users in DB filtering by the location given\n"
     )
 }
 
