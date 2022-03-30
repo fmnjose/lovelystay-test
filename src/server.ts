@@ -9,8 +9,8 @@ const issueTableCreate = (tableName: string) => {
   db.none(`CREATE TABLE ${tableName} (id BIGSERIAL, login TEXT, name TEXT, company TEXT)`)
   .catch((e: Error) => {
     console.log("[ERROR] " + e.message);
-    return;
-  });
+  })
+  .then(() => process.exit(0))
 }
 
 const issueUserCreation = (userName: string) => {
