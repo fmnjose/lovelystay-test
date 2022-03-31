@@ -1,7 +1,7 @@
+import {db} from "./db-module";
 const request             = require('request-promise');
 const R                   = require('ramda');
-const db                  = require("./db-module");
-const processDataToFormat = require("./data-processor");
+import {processDataToFormat} from "./data-processor";
 
 interface GithubUsers{ 
   id : number,
@@ -36,11 +36,12 @@ const issueUserCreation = (userName: string) => {
   .then(() => process.exit(0));
 }
 
+
 const getAllUsersByLocation = (location: string) => {
   db.any(`SELECT * FROM github_users WHERE location = $1`, location)
   .then((data: any[]) => {
-    console.log("\nList of users in", location, ":")
-    processDataToFormat(data);
+    console.log("\nList of users in", location, ":\n");
+    processDataToFormat(data)
   })
   .catch((e: Error) => {
     console.log("[ERROR] " + e.message);
