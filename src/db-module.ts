@@ -15,8 +15,8 @@ interface DBOptions
 
 // Actual database options
 const options : DBOptions = {
-  user: "filipejose",
-  password: "2545",
+  user: "",
+  password: "",
   host: 'localhost',
   database: 'lovelystay_test',
 };
