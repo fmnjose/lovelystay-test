@@ -1,3 +1,5 @@
+import { StringMappingType } from "typescript";
+
 const R         = require('ramda');
 
 function processDataToFormat(data: any[]){
@@ -9,5 +11,9 @@ function processDataToFormat(data: any[]){
   
     R.map((out) => console.log("##",out))(outputArray)
 }
+
+/*function addLanguageList(output: StringMappingType, language: string[]){
+    R.reduce()
+}*/
 
 export {processDataToFormat}
