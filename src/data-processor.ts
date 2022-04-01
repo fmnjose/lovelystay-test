@@ -12,6 +12,7 @@ function processDataToFormat(data: any[]){
                                 processedUsers[user.login] = true;
                                 return R.reduce(R.concat,'',['Login: ',user.login,
                                 ' || Name: ',user.name,
+                                ' || Location: ', (user.location || 'Undisclosed'),
                                 ' || Company: ',(user.company || 'Undisclosed'),
                                 ' || Liked Languages: ', languageByUser(user.login,data)]);
                             }
@@ -33,7 +34,7 @@ function processDataToFormat(data: any[]){
 function languageByUser(userLogin: string, usersList: any[]){
     let languages = "";
     let getLanguageOnMatch = (u) => {
-            if(u.login == userLogin)
+            if(u.login == userLogin && u.language != null)
                 languages += u.language + " ";
         };
     

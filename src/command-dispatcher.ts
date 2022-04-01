@@ -1,7 +1,5 @@
-import {  } from "./server";
-
-const {createUsersTable, createUser, createLikedLanguagesTable, 
-    addLikedLanguage, getUsers} = require('./server');
+import {createUsersTable, createUser, createLikedLanguagesTable, 
+    addLikedLanguage, getUsers} from "./server";
 
 //Enumerator with all the commands available
 enum commandsList {
