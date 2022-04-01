@@ -1,6 +1,4 @@
 # Typescript Interview Test
-4. Run `npm run test` to get the program running (modify the user and password if needed)
-5. Examine the typescript code under `server.ts`
 
 ## How to run
 
