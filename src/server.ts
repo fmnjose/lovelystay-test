@@ -40,7 +40,7 @@ const createLikedLanguagesTable = () => {
   return new Promise((resolve, reject) => {
     db.none(`CREATE TABLE ${LIKED_LANGUAGES_NAME} (
       id SERIAL PRIMARY KEY, 
-      user_id INT REFERENCES ${USERS_TABLE_NAME}(id), 
+      user_id INT NOT NULL REFERENCES ${USERS_TABLE_NAME}(id), 
       language TEXT NOT NULL, 
       UNIQUE (user_id, language))`)
       .then(resolve)
