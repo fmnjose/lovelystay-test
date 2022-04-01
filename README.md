@@ -40,6 +40,6 @@ Depending on the available resources and type of load, these are my suggestions 
 
 1. Identify the columns frequently used when filtering data (like location or language) and create Indexes to help retrieving information from the Database.
 
-2. If there are infrastructure resources, setup secondary database servers with read-replicas from the original database. This would distribute the load among different servers, which would improve the time to get a response from a server. It would also improve the database availability.
+2. Setup secondary database servers with read-replicas from the original database. This would distribute the load among different servers, which would improve the time to get a response from a server. It would also improve the database availability.
 
-3. Identify if there are querys frequently executed (like for example the list of users currently in Lisbon), and store them in some cache system like memcached. This way, not all the requests for data would have to go to the database. If the information is already in cache, the client only needs to contact the database (and increase the load) if there is a cache miss.
+3. Identify if there are popular querys which are frequently executed (like for example the list of users currently in Lisbon), and store the result in some cache system (i.e. memcached). This way, and considering that the database is subject to read-heavy workloads, requests for data would obtain a result from the cache, and didn't need to direct traffic to the database. Having a cache system, the client only needs to contact the database (generating load) if there is a cache miss.
