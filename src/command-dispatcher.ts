@@ -3,6 +3,7 @@ import {  } from "./server";
 const {createUsersTable, createUser, createLikedLanguagesTable, 
     addLikedLanguage, getUsers} = require('./server');
 
+//Enumerator with all the commands available
 enum commandsList {
     CREATE_USER_TABLE = "newusertable",
     CREATE_LANGUAGES_TABLE = "newlanguagestable",
@@ -11,8 +12,13 @@ enum commandsList {
     LIST_USERS = "listusers"
 }
 
+//arguments passed with the command
 const args: string[] = (process.argv.slice(2));
 
+/* Entry point of the program.
+   Processes the commands received and calls
+   server functions
+ */
 function dispatchCommand(command: string[]){
     switch (command[0]) {
         case commandsList.CREATE_USER_TABLE:
@@ -34,9 +40,9 @@ function dispatchCommand(command: string[]){
             break;
 
         case commandsList.LIST_USERS:
-            if(command.length == 1)
+            if(command.length == 1) //Location passed. List filtering by location
                 getUsers();
-            else if(command.length == 2)
+            else if(command.length == 2) //Location and language passed. List filtering by location and language
                 getUsers(command[1]);
             else
                 getUsers(command[1], command[2]);
@@ -48,6 +54,9 @@ function dispatchCommand(command: string[]){
     }
 }
 
+/* Checks if enough arguments are being passed to the command 
+   (the ones that need additional information)
+*/
 function validCommandArgNumber(command: string[], requiredNumber: number){
     let valid: boolean = command.length >= requiredNumber
 
@@ -56,6 +65,9 @@ function validCommandArgNumber(command: string[], requiredNumber: number){
     return valid
 }
 
+/* Prints information abou the available commands.
+   If the user inputs a wrong commands, this is printed
+ */
 function printHelp(){
     console.log(
         "Please use one of the following commands:\n\n",

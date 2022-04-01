@@ -1,5 +1,10 @@
 const R         = require('ramda');
 
+/**
+ * Parses users objects and outputs a formatted string.
+ * Called by other functions when wanting to output the result of a query
+ * @param data User objects to parse
+ */
 function processDataToFormat(data: any[]){
     let processedUsers = {};
     let outputFormat = R.map((user) => {
@@ -19,6 +24,12 @@ function processDataToFormat(data: any[]){
     R.map((out) => console.log("##",out))(outputArray);
 }
 
+/**
+ * Parses the data to compile all languages a user likes
+ * @param userLogin User login
+ * @param usersList List of the users objects
+ * @returns String with formatted list of liked languages
+ */
 function languageByUser(userLogin: string, usersList: any[]){
     let languages = "";
     let getLanguageOnMatch = (u) => {

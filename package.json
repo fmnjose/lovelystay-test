@@ -4,7 +4,6 @@
   "description": "pg-promise-github-test",
   "main": "index.js",
   "scripts": {
-    "test": "node ./node_modules/ts-node/dist/bin.js src/server.ts",
     "command" : "node ./node_modules/ts-node/dist/bin.js src/command-dispatcher.ts"
   },
   "keywords": [
