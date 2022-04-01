@@ -1,6 +1,6 @@
 import {createUsersTable, createUser, createLikedLanguagesTable, 
     addLikedLanguage, getUsers} from "./server";
-
+    
 //Enumerator with all the commands available
 enum commandsList {
     CREATE_USER_TABLE = "newusertable",
@@ -20,32 +20,29 @@ const args: string[] = (process.argv.slice(2));
 function dispatchCommand(command: string[]){
     switch (command[0]) {
         case commandsList.CREATE_USER_TABLE:
-            createUsersTable();
-            break;
-
+            return createUsersTable();
+            
         case commandsList.CREATE_LANGUAGES_TABLE:
-            createLikedLanguagesTable();
-            break;
+            return createLikedLanguagesTable();
 
         case commandsList.ADD_USER:
             if(validCommandArgNumber(command,2))
-                createUser(command[1]);
-            break;
+                return createUser(command[1])
+                        .then(() => { return getUsers()});
         
         case commandsList.ADD_LIKED_LANGUAGE:
             if(validCommandArgNumber(command,3))
-                addLikedLanguage(command[1], command[2])
-            break;
+                return addLikedLanguage(command[1], command[2])
+                        .then(() => { return getUsers()});
 
         case commandsList.LIST_USERS:
-            if(command.length == 1) //Location passed. List filtering by location
-                getUsers();
-            else if(command.length == 2) //Location and language passed. List filtering by location and language
-                getUsers(command[1]);
-            else
-                getUsers(command[1], command[2]);
-            
-            break;
+            if(command.length == 1) 
+                return getUsers();
+            else if(command.length == 2)        //Location passed. List filtering by location 
+                return getUsers(command[1]);
+            else                                //Location and language passed. List filtering by location and language
+                return getUsers(command[1], command[2]);
+
         default:
             printHelp();
             break;
@@ -77,4 +74,14 @@ function printHelp(){
     )
 }
 
+/**
+ * Function to handle errors thrown by exceptions and catched by other functions
+ * @param e Error
+ */
+const errorHandler = (e: Error) => {
+    console.log("[ERROR] " + e.message);
+}
+
 dispatchCommand(args)
+.catch((e: Error) => errorHandler(e))
+.then(() => process.exit(0));
