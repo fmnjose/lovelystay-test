@@ -1,13 +1,48 @@
-import {createUsersTable, createUser, createLikedLanguagesTable, 
-    addLikedLanguage, getUsers} from "./server";
-    
-//Enumerator with all the commands available
-enum commandsList {
-    CREATE_USER_TABLE = "newusertable",
-    CREATE_LANGUAGES_TABLE = "newlanguagestable",
-    ADD_USER = "newuser",
-    ADD_LIKED_LANGUAGE = "addlanguage",
-    LIST_USERS = "listusers"
+const {
+    createUsersTable, 
+    createUser, 
+    createLikedLanguagesTable, 
+    addLikedLanguage, 
+    getUsers
+} = require("./server");
+
+/* Static object with all the commands available
+*  and respective instructions
+*/
+class Command{
+    static readonly CREATE_USER_TABLE = new Command("newusertable", 
+            ` -> Creates a new github_users table (if not existent already)`);
+
+    static readonly CREATE_LANGUAGES_TABLE = new Command("newlanguagestable", 
+            ` -> Creates a new liked_language table (if not existent already)`);
+
+    static readonly ADD_USER = new Command("newuser", 
+            ` <name> -> Create a new user with name <name> and add it to table github_users`);
+
+    static readonly ADD_LIKED_LANGUAGE = new Command("addlanguage", 
+            ` <user_name> <language> -> Add <language> to the list of <user_name>'s liked languages`);
+
+    static readonly LIST_USERS = new Command("listusers", 
+            ` [optional: location] [optional: language] -> List all users in DB.
+                If location is passed, filters by location. If location and language are passed,
+                parses by both filters. Never parses only by language`);
+
+    static readonly COMMAND_LIST = [this.CREATE_USER_TABLE,
+                                   this.CREATE_LANGUAGES_TABLE,
+                                   this.ADD_USER,
+                                   this.ADD_LIKED_LANGUAGE,
+                                   this.LIST_USERS];
+
+    private constructor(private readonly commandstring: string, public readonly description: any){
+    }
+
+    toString(){
+        return `# ${this.commandstring} ${this.description}\n\n`;
+    }
+
+    command_string(){
+        return this.commandstring;
+    }
 }
 
 //arguments passed with the command
@@ -17,25 +52,27 @@ const args: string[] = (process.argv.slice(2));
    Processes the commands received and calls
    server functions
  */
-function dispatchCommand(command: string[]){
+function dispatchCommand(command: string[]): Promise<any>{
     switch (command[0]) {
-        case commandsList.CREATE_USER_TABLE:
+        case Command.CREATE_USER_TABLE.command_string():
             return createUsersTable();
             
-        case commandsList.CREATE_LANGUAGES_TABLE:
+        case Command.CREATE_LANGUAGES_TABLE.command_string():
             return createLikedLanguagesTable();
 
-        case commandsList.ADD_USER:
+        case Command.ADD_USER.command_string():
             if(validCommandArgNumber(command,2))
                 return createUser(command[1])
                         .then(() => { return getUsers()});
-        
-        case commandsList.ADD_LIKED_LANGUAGE:
+            break;
+            
+        case Command.ADD_LIKED_LANGUAGE.command_string():
             if(validCommandArgNumber(command,3))
                 return addLikedLanguage(command[1], command[2])
                         .then(() => { return getUsers()});
+            break;
 
-        case commandsList.LIST_USERS:
+        case Command.LIST_USERS.command_string():
             if(command.length == 1) 
                 return getUsers();
             else if(command.length == 2)        //Location passed. List filtering by location 
@@ -44,8 +81,10 @@ function dispatchCommand(command: string[]){
                 return getUsers(command[1], command[2]);
 
         default:
-            printHelp();
-            break;
+            return new Promise((resolve) => {
+                printHelp();
+                resolve;
+            });
     }
 }
 
@@ -64,14 +103,16 @@ function validCommandArgNumber(command: string[], requiredNumber: number){
    If the user inputs a wrong commands, this is printed
  */
 function printHelp(){
-    console.log(
+    Command.COMMAND_LIST.forEach((command) => console.log(command.toString()));
+
+    /*console.log(
         "Please use one of the following commands:\n\n",
         "# " + commandsList.CREATE_USER_TABLE + " -> Creates a new github_users table (if not existent already)\n\n",
         "# " + commandsList.CREATE_LANGUAGES_TABLE + " -> Creates a new liked_language table (if not existent already)\n\n",
         "# " + commandsList.ADD_USER + " <name> -> Create a new user with name <name> and add it to table github_users\n\n",
         "# " + commandsList.ADD_LIKED_LANGUAGE + " <user_name> <language> -> Add <language> to the list of <user_name>'s liked languages\n\n",
         "# " + commandsList.LIST_USERS + " [optional: location] [optional: language] -> List all users in DB. If location is passed, filters by location. If location and language are passed, parses by both filters. Never parses only by language\n"
-    )
+    )*/
 }
 
 /**
