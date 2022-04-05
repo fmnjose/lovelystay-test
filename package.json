@@ -4,7 +4,7 @@
   "description": "pg-promise-github-test",
   "main": "index.js",
   "scripts": {
-    "test": "node ./node_modules/ts-node/dist/bin.js server.ts"
+    "command" : "node ./node_modules/ts-node/dist/bin.js src/command-dispatcher.ts"
   },
   "keywords": [
     "github",
@@ -19,6 +19,7 @@
     "@types/request-promise": "^4.1.33",
     "@types/winston": "^2.3.0",
     "bluebird": "^3.5.0",
+    "minimist": "^1.2.6",
     "pg-promise": "^5.6.4",
     "ramda": "^0.24.0",
     "request": "*",
